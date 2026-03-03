@@ -1,26 +1,42 @@
 import os
 import time
-import json
 from dotenv import load_dotenv
 from .logger import get_logger
 
 load_dotenv()
 logger = get_logger("ai_service")
 
-# Flag para alternar entre mock e IA real
 USE_MOCK = os.getenv("USE_MOCK", "true").lower() == "true"
 
 MOCK_RESPONSES = {
     "Video": {
-        "description": "Este vídeo apresenta os conceitos fundamentais do tema de forma didática e visual, facilitando a compreensão dos alunos. O conteúdo é organizado em etapas progressivas, partindo do básico até os conceitos mais avançados. Ideal para alunos que preferem aprender através de recursos audiovisuais.",
+        "description": (
+            "Este vídeo apresenta os conceitos fundamentais do tema de forma "
+            "didática e visual, facilitando a compreensão dos alunos. "
+            "O conteúdo é organizado em etapas progressivas, partindo do básico "
+            "até os conceitos mais avançados. "
+            "Ideal para alunos que preferem aprender através de recursos audiovisuais."
+        ),
         "tags": ["videoaula", "educação", "aprendizado"],
     },
     "PDF": {
-        "description": "Este material em PDF reúne os principais conceitos do tema em um formato estruturado e de fácil leitura. O documento conta com exemplos práticos, resumos e exercícios para fixação do conteúdo. Recomendado para estudo individual ou como material de apoio em sala de aula.",
+        "description": (
+            "Este material em PDF reúne os principais conceitos do tema em um "
+            "formato estruturado e de fácil leitura. "
+            "O documento conta com exemplos práticos, resumos e exercícios para "
+            "fixação do conteúdo. "
+            "Recomendado para estudo individual ou como material de apoio em sala de aula."
+        ),
         "tags": ["apostila", "leitura", "material-de-apoio"],
     },
     "Link": {
-        "description": "Este recurso online oferece acesso a conteúdos interativos e atualizados sobre o tema. A plataforma permite que o aluno explore o conteúdo no seu próprio ritmo, com diferentes formatos de apresentação. Indicado como complemento às aulas presenciais ou ao ensino à distância.",
+        "description": (
+            "Este recurso online oferece acesso a conteúdos interativos e "
+            "atualizados sobre o tema. "
+            "A plataforma permite que o aluno explore o conteúdo no seu próprio "
+            "ritmo, com diferentes formatos de apresentação. "
+            "Indicado como complemento às aulas presenciais ou ao ensino à distância."
+        ),
         "tags": ["recurso-online", "interativo", "complementar"],
     },
 }
@@ -30,9 +46,7 @@ def generate_smart_assist(title: str, resource_type: str) -> dict:
     start = time.time()
 
     if USE_MOCK:
-        # Simula latência de uma chamada real
         time.sleep(1.2)
-
         latency = round(time.time() - start, 2)
         logger.info(
             "AI Request completed (MOCK)",
@@ -43,10 +57,7 @@ def generate_smart_assist(title: str, resource_type: str) -> dict:
                 "latency_seconds": latency,
             },
         )
-
-        # Retorna mock baseado no tipo, com fallback para "Link"
         return MOCK_RESPONSES.get(resource_type, MOCK_RESPONSES["Link"])
-
 
 # ---- Implementação da IA abaixo. Infelizmente a utilização foi pausada pois sempre resultava em excedente de limite do tier grátis ----
 
