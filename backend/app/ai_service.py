@@ -59,6 +59,7 @@ def generate_smart_assist(title: str, resource_type: str) -> dict:
         )
         return MOCK_RESPONSES.get(resource_type, MOCK_RESPONSES["Link"])
 
+
 # ---- Implementação da IA abaixo. Infelizmente a utilização foi pausada pois sempre resultava em excedente de limite do tier grátis ----
 
 # import os

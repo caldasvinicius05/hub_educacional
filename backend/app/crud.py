@@ -4,21 +4,12 @@ from . import models, schemas
 
 def get_resources(db: Session, skip: int = 0, limit: int = 10):
     total = db.query(models.Resource).count()
-    items = (
-        db.query(models.Resource)
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
+    items = db.query(models.Resource).offset(skip).limit(limit).all()
     return {"total": total, "items": items}
 
 
 def get_resource(db: Session, resource_id: int):
-    return (
-        db.query(models.Resource)
-        .filter(models.Resource.id == resource_id)
-        .first()
-    )
+    return db.query(models.Resource).filter(models.Resource.id == resource_id).first()
 
 
 def create_resource(db: Session, resource: schemas.ResourceCreate):
@@ -29,9 +20,7 @@ def create_resource(db: Session, resource: schemas.ResourceCreate):
     return db_resource
 
 
-def update_resource(
-    db: Session, resource_id: int, resource: schemas.ResourceUpdate
-):
+def update_resource(db: Session, resource_id: int, resource: schemas.ResourceUpdate):
     db_resource = get_resource(db, resource_id)
     if not db_resource:
         return None
