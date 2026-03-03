@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from . import crud, schemas, models
 from .models import get_db, engine
 from .ai_service import generate_smart_assist
+from typing import List
+from pydantic import BaseModel
 
 # Cria as tabelas no banco, caso elas não existam. 
 # Como é um projeto pequeno, não utilizei migrations.
@@ -23,7 +25,11 @@ app.add_middleware(
 def health_check():
     return {"status": "ok", "service": "Hub Educacional API"}
 
-@app.get("/resources", response_model=dict)
+class PaginatedResources(BaseModel):
+    total: int
+    items: List[schemas.ResourceOut]
+
+@app.get("/resources", response_model=PaginatedResources)
 def list_resources(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return crud.get_resources(db, skip=skip, limit=limit)
 
