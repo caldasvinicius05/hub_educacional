@@ -1,0 +1,38 @@
+name: CI — Backend Linter
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+    name: Lint com flake8 e black
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 black
+
+      - name: Rodar black (formatação)
+        run: |
+          cd backend
+          black --check .
+
+      - name: Rodar flake8 (linter)
+        run: |
+          cd backend
+          flake8 . --max-line-length=88 --exclude=venv
